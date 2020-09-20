@@ -120,6 +120,12 @@ class Tree
     end
   end
 
+  def depth(node=self.root)
+    return if node.nil?
+
+    left_depth = deppth
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -151,6 +157,7 @@ def min_value(node)
   return current
 end
 
+
 end
 
 
@@ -163,8 +170,6 @@ new_tree.delete(2)
 p new_tree.inorder
 new_tree.find(2)
 p new_tree.level_order
-new_tree.pretty_print
-p new_tree.preorder
-p new_tree.postorder
+p new_tree.height
 
 
