@@ -59,18 +59,15 @@ class Tree
   end
 
   def find(value, root=self.root)
-
-    return root if root.nil?
-      
+    return root if root.nil?   
     if value > root.data
-      root.right = find(value, root.right)
-
+      node = find(value, root.right) 
     elsif value < root.data
-      root.left = find(value, root.left)
-    elsif value == root.data
-      return root
+      node = find(value, root.left)     
+    else
+      return node = root
     end
-    return root
+    return node
   end
 
   def level_order(node=self.root)
@@ -120,10 +117,36 @@ class Tree
     end
   end
 
-  def depth(node=self.root)
-    return if node.nil?
+  def height(node=self.root)
+    return 0 if node.nil?
+    return max(height(node.left), height(node.right)) + 1
+  end
 
-    left_depth = deppth
+  def depth(node=self.root)
+    return 0 if node.nil?
+
+    left_depth = depth(node.left)
+    right_depth = depth(node.right)
+
+    left_depth > right_depth ? left_depth + 1 : right_depth + 1
+  end
+
+  def balance?
+    left_root = height(self.root.left)
+    right_root = height(self.root.right)
+    arr = [left_root, right_root]
+    if (arr.max - arr.min) <= 1
+      puts "tree is balanced"
+      true
+    else
+      puts "tree is not balanced"
+      false
+    end
+  end
+
+  def rebalance
+    level_order_array = self.level_order
+    self.root = build_tree(level_order_array)
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -132,10 +155,12 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
+ 
+
   private
 
 
-def build_tree(array=arr, start=0, last=arr.length-1)
+def build_tree(array=arr, start=0, last=array.length-1)
   return nil if start > last
 
   mid = (start + last) / 2
@@ -157,19 +182,47 @@ def min_value(node)
   return current
 end
 
+def max(a, b)
+ return a >= b ? a : b
+end
 
 end
 
 
-new_tree = Tree.new([1,3,4,6,8,10,14,13])
-p new_tree.inorder
-new_tree.insert(2)
-new_tree.insert(7)
-p new_tree.inorder
-new_tree.delete(2)
-p new_tree.inorder
-new_tree.find(2)
+# new_tree = Tree.new([1,3,4,6,8,10,14,13])
+# p new_tree.inorder
+# new_tree.insert(2)
+# new_tree.insert(7)
+# new_tree.insert(15)
+# p new_tree.inorder
+# new_tree.delete(2)
+# p new_tree.inorder
+# p new_tree.find(2)
+# p new_tree.find(3)
+# p new_tree.level_order
+# p new_tree.height
+# p new_tree.depth
+# new_tree.pretty_print
+# new_tree.balance?
+# new_tree.rebalance
+# new_tree.pretty_print
+# new_tree.balance?
+arr = (Array.new(15) {rand(1..100)})
+new_tree = Tree.new(arr)
+new_tree.pretty_print
+new_tree.balance?
 p new_tree.level_order
-p new_tree.height
-
-
+p new_tree.preorder
+p new_tree.inorder
+p new_tree.postorder
+new_tree.insert(101)
+new_tree.insert(122)
+new_tree.insert(133)
+new_tree.pretty_print
+new_tree.balance?
+new_tree.rebalance
+new_tree.pretty_print
+new_tree.balance?
+p new_tree.preorder
+p new_tree.inorder
+p new_tree.postorder
